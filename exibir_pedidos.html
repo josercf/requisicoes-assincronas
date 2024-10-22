@@ -1,0 +1,88 @@
+<!-- exibir_pedidos.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedidos em Aberto</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Pedidos em Aberto</h1>
+    <div id="pedidos" class="row mt-4">
+        <!-- Os pedidos serão carregados aqui -->
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+function carregarPedidos() {
+    $.ajax({
+        url: 'obter_pedidos.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            $('#pedidos').empty();
+            if (data.length > 0) {
+                data.forEach(function(pedido) {
+                    var pedidoCard = `
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="imagens/${pedido.tipo_comida.toLowerCase()}.jpg" class="card-img-top" alt="${pedido.tipo_comida}">
+                            <div class="card-body">
+                                <h5 class="card-title">Pedido #${pedido.id}</h5>
+                                <p class="card-text">
+                                    <strong>Nome:</strong> ${pedido.nome}<br>
+                                    <strong>Endereço:</strong> ${pedido.endereco}<br>
+                                    <strong>Comida:</strong> ${pedido.tipo_comida}<br>
+                                    <strong>Bebida:</strong> ${pedido.bebida || 'Nenhuma'}<br>
+                                    <strong>Doce:</strong> ${pedido.doce || 'Nenhum'}<br>
+                                    <strong>Tempo desde o pedido:</strong> <span class="tempo-passado" data-time="${pedido.data_criacao}"></span> minutos atrás
+                                </p>
+                                <button class="btn btn-success concluir-pedido" data-id="${pedido.id}">Concluir Pedido</button>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    $('#pedidos').append(pedidoCard);
+                });
+                atualizarTempoPassado();
+            } else {
+                $('#pedidos').html('<p class="text-center">Nenhum pedido em aberto.</p>');
+            }
+        }
+    });
+}
+
+function atualizarTempoPassado() {
+    $('.tempo-passado').each(function() {
+        var dataCriacao = $(this).data('time');
+        var pedidoTime = new Date(dataCriacao);
+        var now = new Date();
+        var diffMs = now - pedidoTime;
+        var diffMins = Math.floor(diffMs / 60000);
+        $(this).text(diffMins);
+    });
+}
+
+$(document).ready(function() {
+    carregarPedidos();
+    setInterval(carregarPedidos, 5000); // Atualiza a cada 5 segundos
+
+    // Evento para concluir o pedido
+    $(document).on('click', '.concluir-pedido', function() {
+        var pedidoId = $(this).data('id');
+        $.ajax({
+            url: 'concluir_pedido.php',
+            method: 'POST',
+            data: { pedido_id: pedidoId },
+            success: function(response) {
+                alert(response);
+                carregarPedidos();
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

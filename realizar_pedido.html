@@ -1,0 +1,50 @@
+<!-- realizar_pedido.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Realizar Pedido</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Faça seu Pedido</h1>
+    <form action="criar_pedido.php" method="POST" class="mt-4">
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+        <div class="form-group">
+            <label for="endereco">Endereço:</label>
+            <input type="text" class="form-control" id="endereco" name="endereco" required>
+        </div>
+        <div class="form-group">
+            <label for="tipo_comida">Tipo de Comida:</label>
+            <select class="form-control" id="tipo_comida" name="tipo_comida" required>
+                <option value="Massas">Massas</option>
+                <option value="Carne">Carne</option>
+                <option value="Pizza">Pizza</option>
+                <option value="Esfiha">Esfiha</option>
+                <option value="Doces">Doces</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="bebida">Bebida:</label>
+            <select class="form-control" id="bebida" name="bebida">
+                <option value="">Nenhuma</option>
+                <option value="Água">Água</option>
+                <option value="Coca-Cola">Coca-Cola</option>
+                <option value="Fanta">Fanta</option>
+                <option value="Guaraná">Guaraná</option>
+                <option value="Itubaína">Itubaína</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="doce">Doce:</label>
+            <input type="text" class="form-control" id="doce" name="doce">
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar Pedido</button>
+    </form>
+</div>
+</body>
+</html>
